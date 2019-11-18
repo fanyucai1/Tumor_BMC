@@ -43,7 +43,7 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
     cmd = os.popen("%s intersect -bed -u -abam %s -b %s | wc -l"%(bedtools,bam,target_bed))
     reads = cmd.read()
     reads = reads.strip()
-    outfile = open("%s.MetricsReport.tsv" % (out), "w")
+    outfile = open("%s.bam.stat.tsv" % (out), "w")
     outfile.write("Counts-On-Target_Reads\t%s\n"%(reads))
     ################################################
     infile = open("%s.insert_size_metrics.txt" % (out), "r")
