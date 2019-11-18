@@ -2,6 +2,7 @@ import os
 import subprocess
 import configparser
 import argparse
+import re
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         configparser.ConfigParser.__init__(self, defaults=defaults)
@@ -18,6 +19,7 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
     gatk3 = config.get('software', 'gatk3.7')
     bedtools=config.get('software','bedtools2.28.0')
     ref=config.get('database', 'hg19_ref')
+    samtools=config.get('software', 'samtools1.9')
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     out=outdir+"/"+prefix
@@ -39,6 +41,9 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
           " -ct 150 -ct 200 -ct 250 -ct 500 -L %s/target.interval_list --omitDepthOutputAtEachBase --omitIntervalStatistics" \
           % (java,gatk3, ref, bam, out, outdir)
     subprocess.check_call(cmd, shell=True)
+    ###########################################
+    cmd="%s flagstat %s >%s.flagstat"%(samtools,bam,out)
+    subprocess.check_call(cmd,shell=True)
     ################Count On-Target Reads##########
     cmd = os.popen("%s intersect -bed -u -abam %s -b %s | wc -l"%(bedtools,bam,target_bed))
     reads = cmd.read()
@@ -108,7 +113,14 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
                 if name[i] == "%_bases_above_500":
                     outfile.write("%%_bases_above_500X\t%s\n" % (array[i]))
     infile.close()
-    outfile.close()
+    infile = open("%s.flagstat"%(out), "r")
+    for line in infile:
+        line = line.strip()
+        if re.search(r'properly paired', line):
+            pattern = re.compile(r'([\d+]%)')
+            a = pattern.findall(line)
+            outfile.write("properly paired mapped\t%s\n" % (a[0]))
+    infile.close()
     outfile.close()
     subprocess.check_call("rm -rf %s.sample*"%(out),shell=True)
 if __name__=="__main__":

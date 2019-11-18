@@ -124,6 +124,9 @@ def run(fastq_dir,bam_stat_dir,outdir):
     outfile.write("\nDuplication(%)\tNA\tNA")
     for i in range(len(SampleID)):
         outfile.write("\t%.2f" % (float(dup[SampleID[i]])*100))
+    outfile.write("\nPCT_ALIGNED_READS(%)\tNA\tNA")
+    for i in range(len(SampleID)):
+        outfile.write("\t%.2f" % (float(dup[SampleID[i]])*100))
     outfile.write("\n")
     outfile.close()
 

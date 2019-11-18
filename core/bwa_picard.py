@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import time
 import configparser
-
+import pysam
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         configparser.ConfigParser.__init__(self, defaults=defaults)
@@ -26,14 +26,14 @@ def run(pe1,pe2,outdir,prefix,configfile):
     out=outdir+"/"+prefix
     cmd = "%s mem -t 10 -R \'@RG\\tID:%s\\tSM:%s\\tLB:lib:\\tPL:Illumina\' %s %s %s |" % (bwa, prefix, prefix, ref, pe1, pe2)
     cmd += "%s view -@ 10 -o %s.bam" % (samtools, out)
-    subprocess.check_call(cmd, shell=True)
+    #subprocess.check_call(cmd, shell=True)
     cmd = "%s sort -@ 10 %s.bam -o %s.sort.bam && rm %s.bam && %s index %s.sort.bam" % (samtools, out, out,out,samtools, out)
-    subprocess.check_call(cmd, shell=True)
+    #subprocess.check_call(cmd, shell=True)
     cmd = "%s -Xmx100G -jar %s MarkDuplicates I=%s.sort.bam O=%s.dup.bam M=%s.marked_dup_metrics.txt && rm %s.sort.bam %s.sort.bam.bai && %s index %s.dup.bam" % (java, picard, out, out, out,out,out,samtools,out)
-    subprocess.check_call(cmd, shell=True)
+    #subprocess.check_call(cmd, shell=True)
     end=time.time()
     print("Elapse time is %g seconds" % (end - start))
-
+    
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Map to Reference and Mark Duplicates")
     parser.add_argument("-p1","--pe1",help="5 reads",required=True)
