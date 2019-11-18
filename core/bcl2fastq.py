@@ -24,6 +24,7 @@ def run(bcldir,outdir,SampleSheet,configfile):
     subprocess.check_call(cmd,shell=True)
     end=time.time()
     print("bcl2fastq has done,elapse time is %g seconds" % (end - start))
+    return cmd
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run bcl2fastq pipeline.\n")
