@@ -23,7 +23,7 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     out=outdir+"/"+tumor_name
-    par=" -mnp-dist 2 -unique 5 --callable-depth 30 --create-output-bam-index true --min-base-quality-score 20 --native-pair-hmm-threads 8 "
+    par=" -mnp-dist 2 --callable-depth 30 --create-output-bam-index true --min-base-quality-score 20 --native-pair-hmm-threads 8 "
     par+=" -R %s -bamout %s.bam --germline-resource %s "%(hg19_ref,out,germline_resource)
     if pon!="0":
         par+=" -pon %s "%(pon)
@@ -35,7 +35,7 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
         par+=" -L %s.interval_list "%(out)
     cmd="%s -Xmx40G -jar %s Mutect2 -I %s -tumor %s %s -O %s.vcf.gz"%(java,gatk4,tumor_bam,tumor_name,par,out)
     subprocess.check_call(cmd,shell=True)
-    cmd="%s -Xmx40G -jar %s FilterMutectCalls --min-reads-per-strand 1 -R %s -V %s -O %s.filtered.vcf.gz"%(java,gatk4,hg19_ref,out,out)
+    cmd="%s -Xmx40G -jar %s FilterMutectCalls -unique 5 --min-reads-per-strand 1 -R %s -V %s.vcf.gz -O %s.filtered.vcf.gz"%(java,gatk4,hg19_ref,out,out)
     subprocess.check_call(cmd,shell=True)
     end=time.time()
     print("Elapse time is %g seconds" % (end - start))
@@ -51,7 +51,7 @@ if __name__=="__main__":
     parser.add_argument("--config",help="config file",required=True)
     parser.add_argument("--pon", help="panel-of-normals vcf file",default="0")
     args=parser.parse_args()
-    run(args.tbam, args.tname,args.nbam, args.bed, args.outdir, args.configfile,args.pon)
+    run(args.tbam, args.tname,args.nbam, args.bed, args.outdir, args.config,args.pon)
 """
 1：by fewer than 5 variant reads are typically considered to be likely false positive calls
 2：Any base call with Q<20 should be considered low quality

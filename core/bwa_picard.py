@@ -25,7 +25,7 @@ def run(pe1,pe2,outdir,prefix,configfile):
     os.chdir(outdir)
     out=outdir+"/"+prefix
     cmd = "%s mem -t 10 -R \'@RG\\tID:%s\\tSM:%s\\tLB:lib:\\tPL:Illumina\' %s %s %s |" % (bwa, prefix, prefix, ref, pe1, pe2)
-    cmd += "%s view -q20 -@ 10 -o %s.bam" % (samtools, out)
+    cmd += "%s view -@ 10 -o %s.bam" % (samtools, out)
     subprocess.check_call(cmd, shell=True)
     cmd = "%s sort -@ 10 %s.bam -o %s.sort.bam && rm %s.bam && %s index %s.sort.bam" % (samtools, out, out,out,samtools, out)
     subprocess.check_call(cmd, shell=True)
