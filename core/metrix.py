@@ -26,7 +26,7 @@ def run(fastq_dir,bam_stat_dir,outdir):
     ####################################
     Target_Reads, insert_size, mean_depth, median_depth = {}, {}, {}, {}
     base1, base20, base50, base100, base200, base250, base500 = {}, {}, {}, {}, {}, {}, {}
-    FOLD_80_BASE_PENALTY,dup = {},{}
+    FOLD_80_BASE_PENALTY,dup,align = {},{},{}
     for (root, dirs, files) in os.walk(bam_stat_dir):
         for file in files:
             tmp = os.path.join(root, file)
@@ -61,6 +61,8 @@ def run(fastq_dir,bam_stat_dir,outdir):
                         base250[tmp.split("/")[-2]] = array[1]
                     if num == 12:
                         base500[tmp.split("/")[-2]] = array[1]
+                    if num==13:
+                        align[tmp.split("/")[-2]] = array[1]
                 infile.close()
             if tmp.endswith("marked_dup_metrics.txt"):
                 infile=open(tmp,"r")
