@@ -30,7 +30,7 @@ def run(pe1,pe2,minlen,prefix,outdir,configfile):
     cmd="%s -i %s -I %s -o %s_R1_001.fastq.gz -O %s_R2_001.fastq.gz %s " %(fastp,pe1,pe2,prefix,prefix,par)
     subprocess.check_call(cmd, shell=True)
     json_file= os.path.abspath("%s/%s.json"%(outdir,prefix))
-    outfile = open("%s/%s_raw_data_stat.csv" % (outdir, prefix), "w")
+    outfile = open("%s/%s_raw_data_stat.tsv" % (outdir, prefix), "w")
     outfile.write("SampleID\tRaw_reads\tQ30_R1\tQ30_R2\tClean_reads\n")
     with open("%s" % (json_file), "r") as load_f:
         load_dict = json.load(load_f)
@@ -41,6 +41,7 @@ def run(pe1,pe2,minlen,prefix,outdir,configfile):
     outfile.write("%s\t%s\t%s\t%s\t%s\n" % (prefix, raw1, raw2, raw3,clean1))
     outfile.close()
     subprocess.check_call("rm %s.json %s.html"%(out,out),shell=True)
+    return cmd
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser("QC using fastp.")

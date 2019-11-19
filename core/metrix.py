@@ -10,7 +10,7 @@ def run(fastq_dir,bam_stat_dir,outdir):
     for(root,dirs,files) in os.walk(fastq_dir):
         for file in files:
             tmp=os.path.join(root,file)
-            if tmp.endswith("csv"):
+            if tmp.endswith("tsv"):
                 infile=open(tmp,"r")
                 num=0
                 for line in infile:
