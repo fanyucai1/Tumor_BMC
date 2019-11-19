@@ -2,7 +2,6 @@ import os
 import subprocess
 import argparse
 import time
-import datetime
 import configparser
 
 class Myconf(configparser.ConfigParser):
