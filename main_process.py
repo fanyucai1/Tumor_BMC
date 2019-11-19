@@ -90,6 +90,12 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
         out_shell.write("%s %s/core/metrix.py %s/fastq_qc/ %s/mapping/ %s/QC/"
                         %(python3,dir_name,out,out,out))
     out_shell.close()
+    #######################################fusion
+    out_shell = open("%s/shell/fusion.8.sh" % (out), "w")
+    if not os.path.exists("%s/fusion/"%(out)):
+        os.mkdir("%s/fusion/"%(out))
+    out_shell.close()
+
     #######################################
     core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
     core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
