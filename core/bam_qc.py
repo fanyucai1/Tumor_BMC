@@ -11,6 +11,7 @@ class Myconf(configparser.ConfigParser):
         return optionstr
 
 def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
+
     config = Myconf()
     config.read(configfile)
     java = config.get('software', 'java')
@@ -23,6 +24,8 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     out=outdir+"/"+prefix
+    outfile = open("%s.bam.stat.tsv" % (out), "w")
+    """
     ####BedToIntervalList (Picard)#############
     cmd="%s -jar %s BedToIntervalList I=%s O=%s/target.interval_list SD=%s" %(java,picard,target_bed,outdir,bam)
     subprocess.check_call(cmd,shell=True)
@@ -48,7 +51,6 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
     cmd = os.popen("%s intersect -bed -u -abam %s -b %s | wc -l"%(bedtools,bam,target_bed))
     reads = cmd.read()
     reads = reads.strip()
-    outfile = open("%s.bam.stat.tsv" % (out), "w")
     outfile.write("Counts-On-Target_Reads\t%s\n"%(reads))
     ################################################
     infile = open("%s.insert_size_metrics.txt" % (out), "r")
@@ -113,11 +115,12 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
                 if name[i] == "%_bases_above_500":
                     outfile.write("%%_bases_above_500X\t%s\n" % (array[i]))
     infile.close()
+    """
     infile = open("%s.flagstat"%(out), "r")
     for line in infile:
         line = line.strip()
         if re.search(r'properly paired', line):
-            pattern = re.compile(r'([\d+]%)')
+            pattern = re.compile(r'(\d+.\d+)%')
             a = pattern.findall(line)
             outfile.write("properly paired mapped\t%s\n" % (a[0]))
     infile.close()
