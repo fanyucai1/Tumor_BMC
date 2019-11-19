@@ -25,7 +25,6 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
         os.mkdir(outdir)
     out=outdir+"/"+prefix
     outfile = open("%s.bam.stat.tsv" % (out), "w")
-    """
     ####BedToIntervalList (Picard)#############
     cmd="%s -jar %s BedToIntervalList I=%s O=%s/target.interval_list SD=%s" %(java,picard,target_bed,outdir,bam)
     subprocess.check_call(cmd,shell=True)
@@ -115,7 +114,6 @@ def run(target_bed,probe_bed,bam,outdir,prefix,configfile):
                 if name[i] == "%_bases_above_500":
                     outfile.write("%%_bases_above_500X\t%s\n" % (array[i]))
     infile.close()
-    """
     infile = open("%s.flagstat"%(out), "r")
     for line in infile:
         line = line.strip()
