@@ -94,8 +94,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
     out_shell = open("%s/shell/fusion.8.sh" % (out), "w")
     if not os.path.exists("%s/fusion/"%(out)):
         os.mkdir("%s/fusion/"%(out))
+    for prefix in sampleID:
+        out_shell.write("%s %s/core/fusion.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/fusion/%s -p %s -c %s"
+                        %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
-
     #######################################
     core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
     core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
@@ -104,6 +106,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
     core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out),"bam stat")
     core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out),'Call snv and indel')
     core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
+    core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out),"Gene fusion")
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
