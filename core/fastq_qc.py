@@ -6,7 +6,6 @@ import argparse
 import subprocess
 import json
 import configparser
-fastp="/software/fastp/fastp"
 
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
