@@ -2,7 +2,6 @@
 
 import subprocess
 import os
-import sys
 import re
 import argparse
 import configparser
