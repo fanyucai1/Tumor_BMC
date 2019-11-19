@@ -91,13 +91,13 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
                         %(python3,dir_name,out,out,out))
     out_shell.close()
     #######################################
-    core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out))
-    core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out))
-    core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out))
-    core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out))
-    core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out))
-    core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out))
-    core.set_use_parallel.run("%s/shell/metrix.7.s" % (out))
+    core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
+    core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
+    core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
+    core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out),"BQSR")
+    core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out),"bam stat")
+    core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out),'Call snv and indel')
+    core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")

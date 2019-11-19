@@ -15,4 +15,6 @@ def run(shfile,shell_name):
     pool = Pool(processes=5)
     pool.map(f,array)
     end=time.time()
-    print("%s has done,total elapse time is %g seconds" % (shell_name,end - start))
+    print("\n=============step:%s start================\n"%(shell_name))
+    print("\nTotal elapse time is %g seconds\n" % (end - start))
+    print("\n==============step:%s finished===============\n"%(shell_name))
