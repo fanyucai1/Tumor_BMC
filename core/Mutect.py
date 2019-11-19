@@ -41,6 +41,8 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
     print("Elapse time is %g seconds" % (end - start))
 
 
+
+
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run GATK Mutect")
     parser.add_argument("--tbam",help="tumor bam file",required=True)
