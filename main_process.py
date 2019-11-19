@@ -11,6 +11,8 @@ import time
 import subprocess
 project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
 def run(outdir,SampleSheet,rundir,configfile):
+    #######################################get sampleID
+    sampleID=core.parse_samplesheet.run(SampleSheet)
     #######################################
     out=outdir+"/"+project
     if not os.path.exists(out):
@@ -31,8 +33,12 @@ def run(outdir,SampleSheet,rundir,configfile):
     cmd=core.bcl2fastq.run(rundir,"%s/validate_fastq"%(out),SampleSheet,configfile)
     subprocess.check_call("echo %s >%s/shell/bcl2fastq.sh"%(cmd,out),shell=True)
     #######################################get sampleID
-    sample=core.parse_samplesheet.run(SampleSheet)
-    #######################################
+    for (root,dirs,files) in os.walk("%s/validate_fastq" % (out)):
+        for file in files:
+            tmp=os.path.join(root,file)
+            if tmp.endswith("_R1_001.fastq.gz"):
+                R2=tmp.replace("_R1_","_R2_")
+
 
 
 

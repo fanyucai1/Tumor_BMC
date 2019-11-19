@@ -27,7 +27,7 @@ def run(pe1,pe2,minlen,prefix,outdir,configfile):
     pe2=os.path.abspath(pe2)
     os.chdir(outdir)
     par=" --detect_adapter_for_pe -W 4 -M 20 -l %s -w 8 -j %s.json -h %s.html " %(minlen,prefix,prefix)
-    cmd="%s -i %s -I %s -o %s.R1.fq.gz -O %s.R2.fq.gz %s " %(fastp,pe1,pe2,prefix,prefix,par)
+    cmd="%s -i %s -I %s -o %s_R1_001.fastq.gz -O %s_R2_001.fastq.gz %s " %(fastp,pe1,pe2,prefix,prefix,par)
     subprocess.check_call(cmd, shell=True)
     json_file= os.path.abspath("%s/%s.json"%(outdir,prefix))
     outfile = open("%s/%s_raw_data_stat.csv" % (outdir, prefix), "w")
