@@ -99,4 +99,4 @@ if __name__=="__main__":
     parser.add_argument("--probe",help="probe bed",default="0")
     parser.add_argument("--config",help="config file",required=True)
     args=parser.parse_args()
-    run(args.rundir,args.outdir,args.SampleSheet)
+    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe)
