@@ -14,7 +14,7 @@ class Myconf(configparser.ConfigParser):
 def run(bcldir,outdir,SampleSheet,configfile):
     config = Myconf()
     config.read(configfile)
-    bcl2fastq=config.get('software','bcl2fastq')
+    bcl2fastq=config.get('software','bcl2fastq2.20.0.422')
     start=time.time()
     cmd="%s --runfolder-dir %s -o %s -r 8 -p 20 -w 8 --barcode-mismatches 0 " \
         "--ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions " \
