@@ -77,6 +77,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
         out_shell.write("%s %s/core/BQSR.py -b %s/mapping/%s/%s.dup.bam -l %s -o %s/mapping/%s/ -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,target,out,prefix,prefix,configfile))
     out_shell.close()
+    if not os.path.exists("%s/shell/BQSR.log" % (out)):
+        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR")
+        subprocess.check_call('echo BQSR done >%s/shell/BQSR.log' % (out), shell=True)
     #######################################bam stat
     out_shell = open("%s/shell/bam.qc.5.sh" % (out), "w")
     if probe=="0":
@@ -110,8 +113,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell.close()
     #######################################
     """
-    core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
-    core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out),"BQSR")
     core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out),"bam stat")
     core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out),'Call snv and indel')
     core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
