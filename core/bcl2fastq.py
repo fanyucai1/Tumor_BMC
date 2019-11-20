@@ -30,3 +30,6 @@ if __name__=="__main__":
     parser.add_argument("--SampleSheet",help="SampleSheet csv file",required=True)
     parser.add_argument("--outdir",help="output directory",required=True)
     parser.add_argument("--bcldir",help="Raw bcl directory",required=True)
+    parser.add_argument("--config", help="config file", required=True)
+    args=parser.parse_args()
+    run(args.bcldir,args.outdir,args.SampleSheet,args.config)

@@ -8,6 +8,7 @@ import argparse
 import re
 import time
 import configparser
+import subprocess
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         configparser.ConfigParser.__init__(self, defaults=defaults)
@@ -35,8 +36,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     if not os.path.exists("%s/validate_fastq" % (out)):
         os.mkdir("%s/validate_fastq" % (out))
     out_shell = open("%s/shell/bcl2fastq.1.sh" % (out), "w")
-    out_shell.write("%s %s/core/bcl2fastq.py --SampleSheet %s --outdir %s/validate_fastq --bcldir %s"
-                    %(python3,dir_name,SampleSheet,out,rundir))
+    out_shell.write("%s %s/core/bcl2fastq.py --SampleSheet %s --outdir %s/validate_fastq --bcldir %s --config %s"
+                    %(python3,dir_name,SampleSheet,out,rundir,configfile))
     out_shell.close()
     #######################################run fastq quality control
     out_shell=open("%s/shell/fastq_qc.2.sh"%(out),"w")
@@ -100,8 +101,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell.close()
     #######################################
     #######################################
+    if not os.path.exists("%s/shell/bcl2fastq.log"%(out)):
+        core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
+        subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     """
-    core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
     core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
     core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
     core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out),"BQSR")
