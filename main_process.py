@@ -43,7 +43,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
         core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
         subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     #######################################run fastq quality control
-    core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc")
     out_shell=open("%s/shell/fastq_qc.2.sh"%(out),"w")
     if not os.path.exists("%s/fastq_qc/"%(out)):
         os.mkdir("%s/fastq_qc/"%(out))

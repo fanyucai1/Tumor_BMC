@@ -9,7 +9,7 @@ def run(Samplesheet):
         num+=1
         if line.startswith("Sample_ID"):
             counts=num
-        if counts!=0 and num==counts+1:
+        if counts!=0 and num>counts:
             if array[1]=="":
                 sample.append(array[0])
             else:
