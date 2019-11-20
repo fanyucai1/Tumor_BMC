@@ -99,6 +99,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
     out_shell.close()
     #######################################
     #######################################
+    """
     core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
     core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
     core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
@@ -107,6 +108,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
     core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out),'Call snv and indel')
     core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
     core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out),"Gene fusion")
+    """
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
