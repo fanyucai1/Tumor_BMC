@@ -39,7 +39,11 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell.write("%s %s/core/bcl2fastq.py --SampleSheet %s --outdir %s/validate_fastq --bcldir %s --config %s"
                     %(python3,dir_name,SampleSheet,out,rundir,configfile))
     out_shell.close()
+    if not os.path.exists("%s/shell/bcl2fastq.log"%(out)):
+        core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
+        subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     #######################################run fastq quality control
+    core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc")
     out_shell=open("%s/shell/fastq_qc.2.sh"%(out),"w")
     if not os.path.exists("%s/fastq_qc/"%(out)):
         os.mkdir("%s/fastq_qc/"%(out))
@@ -54,6 +58,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
                         out_shell.write("%s %s/core/fastq_qc.py -p1 %s -p2 %s -o %s/fastq_qc/%s -p %s -l %s -c %s\n"
                                         %(python3,dir_name,R1,R2,out,prefix,prefix,75,configfile))
     out_shell.close()
+    if not os.path.exists("%s/shell/fastq_qc.log"%(out)):
+        core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc")
+        subprocess.check_call('echo fastq_qc done >%s/shell/fastq_qc.log' % (out), shell=True)
     #######################################bwa_picard
     out_shell = open("%s/shell/mapping.3.sh" % (out), "w")
     if not os.path.exists("%s/mapping/"%(out)):
@@ -100,10 +107,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     #######################################
-    #######################################
-    if not os.path.exists("%s/shell/bcl2fastq.log"%(out)):
-        core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
-        subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     """
     core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
     core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
