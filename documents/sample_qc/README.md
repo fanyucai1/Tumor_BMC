@@ -53,7 +53,4 @@ This script will filter fastq files and stat raw data.
           -l MINLEN, --minlen MINLEN
                                 min length output default is 75
 So A P, Vilborg A, Bouhlal Y, et al. A robust targeted sequencing approach for low input and variable quality DNA from clinical samples[J]. NPJ genomic medicine, 2018, 3(1): 2. 
-
-Pindel.py
-
-    Run Pindel for Long Indels & MNPS (32bp-350bp)    
+  
