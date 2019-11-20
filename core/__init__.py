@@ -5,3 +5,10 @@ from . import fastq_qc
 from . import Mutect
 from . import bcl2fastq
 from . import parse_samplesheet
+from . import anno_vcf
+from . import filter_annovar
+from . import fusion
+from . import metrix
+from . import normalize_vcf
+from . import Mutect
+from . import set_use_parallel
