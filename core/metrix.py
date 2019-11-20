@@ -108,7 +108,7 @@ def run(fastq_dir,bam_stat_dir,outdir):
     outfile.write("Metric(UOM)\tLSL Guideline\tUSL Guideline")
     for i in range(len(SampleID)):
         outfile.write("\t%s"%(SampleID[i]))
-    outfile.write("Raw_read(Counts)\tNA\tNA")
+    outfile.write("\nRaw_read(Counts)\tNA\tNA")
     for i in range(len(SampleID)):
         outfile.write("\t%s"%(Raw_reads[SampleID[i]]))
     outfile.write("\nTarget_read(Counts)\tNA\tNA")
