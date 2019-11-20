@@ -68,6 +68,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
         out_shell.write("%s %s/core/bwa_picard.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/mapping/%s -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
+    if not os.path.exists("%s/shell/mapping.log"%(out)):
+        core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out), "mapping")
+        subprocess.check_call('echo mapping done >%s/shell/mapping.log'%(out),shell=True)
     #######################################BQSR
     out_shell = open("%s/shell/BQSR.4.sh" % (out), "w")
     for prefix in sampleID:
@@ -107,7 +110,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell.close()
     #######################################
     """
-    core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out),"fastq_qc")
     core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out),"mapping")
     core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out),"BQSR")
     core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out),"bam stat")
