@@ -112,11 +112,11 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe):
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
-    parser.add_argument('--rundir',help="bcl directory",required=True)
-    parser.add_argument('--outdir',help="output directory",required=True,default="/data/fyc_panel27")
-    parser.add_argument("--SampleSheet", help="SampleSheet csv file", required=True)
-    parser.add_argument("--target",help="target bed file",required=True)
-    parser.add_argument("--probe",help="probe bed",default="0")
-    parser.add_argument("--config",help="config file",required=True)
+    parser.add_argument("-r",'--rundir',help="bcl directory",required=True)
+    parser.add_argument("-o",'--outdir',help="output directory",required=True,default="/data/fyc_panel27")
+    parser.add_argument("-s","--SampleSheet", help="SampleSheet csv file", required=True)
+    parser.add_argument("-t","--target",help="target bed file",required=True)
+    parser.add_argument("-p","--probe",help="probe bed",default="0")
+    parser.add_argument("-c","--config",help="config file",required=True)
     args=parser.parse_args()
     run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe)
