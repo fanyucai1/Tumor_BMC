@@ -8,7 +8,7 @@ http://netdocs.roche.com/DDM/Effective/07187009001_RNG_SeqCap-EZ_TchNote_Eval-da
 
 https://twistbioscience.com/sites/default/files/resources/2018-10/Twist_NGS_WhitePaper_UniformityonTarget_18Sep18.pdf
 
-sample_qc.py
+### core/sample_qc.py
 
 This script will given a metrix of bam file stat.
 
@@ -36,7 +36,7 @@ The result output as follows::
         %_bases_above_250X	83.1
         %_bases_above_500	78.2
 
-fastq_qc.py
+### core/fastq_qc.py
 
 This script will filter fastq files and stat raw data.
 
