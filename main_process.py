@@ -15,12 +15,13 @@ class Myconf(configparser.ConfigParser):
     def optionxform(self, optionstr):
         return optionstr
 ######################################
-project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
+#project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
 ######################################
 
-def run(outdir,SampleSheet,rundir,configfile,target,probe):
+def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     config = Myconf()
     config.read(configfile)
+    project =name
     python3 = config.get('software', 'python3.7')
     #######################################get sampleID
     sampleID=core.parse_samplesheet.run(SampleSheet)
@@ -118,5 +119,6 @@ if __name__=="__main__":
     parser.add_argument("-t","--target",help="target bed file",required=True)
     parser.add_argument("-p","--probe",help="probe bed",default="0")
     parser.add_argument("-c","--config",help="config file",required=True)
+    parser.add_argument("-n","--name",help="project name",required=True)
     args=parser.parse_args()
     run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe)
