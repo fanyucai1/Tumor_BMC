@@ -88,6 +88,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
         out_shell.write("%s %s/core/bam_qc.py -t %s -r %s -c %s -o %s/mapping/%s -p %s -b %s/mapping/%s/%s.recal.bam\n"
                         %(python3,dir_name,target,probe,configfile,out,prefix,prefix,out,prefix,prefix))
     out_shell.close()
+    if not os.path.exists("%s/shell/bam.qc.log"%(out)):
+        core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out), "bam stat")
+        subprocess.check_call('echo bam stat done >%s/shell/bam.qc.log' % (out), shell=True)
     #######################################call SNV and Indel
     out_shell = open("%s/shell/SNV_indel.6.sh" % (out), "w")
     if not os.path.exists("%s/SNV_indel/"%(out)):
@@ -96,6 +99,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
         out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
                         %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
     out_shell.close()
+    if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
+        core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel')
+        subprocess.check_call('echo done >%s/shell/SNV_indel.log'%(out),shell=True)
     #######################################metrix
     out_shell = open("%s/shell/metrix.7.sh" % (out), "w")
     if not os.path.exists("%s/QC/"%(out)):
@@ -113,8 +119,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell.close()
     #######################################
     """
-    core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out),"bam stat")
-    core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out),'Call snv and indel')
     core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
     core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out),"Gene fusion")
     """
