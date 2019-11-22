@@ -131,9 +131,12 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
         os.mkdir("%s/anno/"%(out))
     for prefix in sampleID:
         if method=="GATK":
-            out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK")
+            out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK\n"
+                            %(python3,dir_name,out,prefix,out,prefix,prefix,configfile))
         else:
-            pass
+            out_shell.write(
+                "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t vardict\n"
+                % (python3, dir_name, out, prefix, out, prefix, prefix, configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
