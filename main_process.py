@@ -139,6 +139,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
                 % (python3, dir_name, out, prefix, out, prefix, prefix, configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
+        core.set_use_parallel("%s/shell/anno.9.sh" % (out),"anno vcf")
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
 if __name__=="__main__":
