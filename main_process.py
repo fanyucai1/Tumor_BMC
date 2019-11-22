@@ -133,6 +133,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
     for prefix in sampleID:
         ###################format vcf
         if method=="GATK" or method=='all':
+            if not os.path.exists("%s/anno/GATK"%(out)):
+                os.mkdir("%s/anno/GATK"%(out))
             out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/GATK/%s -p %s -c %s -t GATK && "
                             %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
             ###################anno
@@ -142,6 +144,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
             out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/GATK/%s/%s.annovar.tsv -o %s/anno/GATK/%s -p %s -c %s\n"
                             % (python3, dir_name, out, prefix, prefix, out, prefix, prefix, configfile))
         if method == "vardict" or method == 'all':
+            if not os.path.exists("%s/anno/vardict" % (out)):
+                os.mkdir("%s/anno/vardict" % (out))
             out_shell.write(
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.vardict.vcf -o %s/anno/vardict/%s -p %s -c %s -t vardict && "
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
