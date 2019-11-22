@@ -19,7 +19,7 @@ class Myconf(configparser.ConfigParser):
 #project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
 ######################################
 
-def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
+def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
     config = Myconf()
     config.read(configfile)
     project =name
@@ -100,7 +100,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
             out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
                             %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
         else:
-            out_shell.write()
+            out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"
+                            %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
         core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel')

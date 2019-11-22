@@ -12,3 +12,4 @@ from . import metrix
 from . import normalize_vcf
 from . import Mutect
 from . import set_use_parallel
+from . import vardict
