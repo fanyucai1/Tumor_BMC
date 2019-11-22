@@ -96,10 +96,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         os.mkdir("%s/SNV_indel/"%(out))
     for prefix in sampleID:
         if method=="GATK" or method=="all":
-            if pon!="0":
-                out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
-            else:
-                out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n" % (python3, dir_name, out, prefix, prefix, prefix, target, configfile, out, prefix))
+            out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
         if method == "vardict" or method == "all":
             out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"
                             %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
