@@ -52,7 +52,7 @@ def GATK_run(tumor_name,vcf,outdir,prefix,configfile):
                 tmp += "\tGT=%s;Ref_Reads=%s;Alt_Reads=%s;Var=%s\n" % (GT, Ref_Reads, Alt_Reads, AF)
                 outfile.write(tmp)
     outfile.close()
-    subprocess.check_call("rm %s/%s.tmp.vcf"%(outdir,prefix),shell=True)
+    subprocess.check_call("rm %s/%s.tmp.vcf %s/%s.tmp.vcf.idx"%(outdir,prefix,outdir,prefix),shell=True)
 
 def vardict_run(tumor, vcf, outdir,prefix):
     if not os.path.exists(outdir):

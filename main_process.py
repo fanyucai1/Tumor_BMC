@@ -131,15 +131,17 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
         os.mkdir("%s/anno/"%(out))
     for prefix in sampleID:
         if method=="GATK":
-            out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK\n"
+            out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK && "
                             %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
         else:
             out_shell.write(
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t vardict\n"
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
+        out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/%s/%s.normalize.vcf -o %s/anno/%s -p %s -c %s\n"
+                        %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
-        core.set_use_parallel("%s/shell/anno.9.sh" % (out),"anno vcf")
+        core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf")
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
 if __name__=="__main__":
