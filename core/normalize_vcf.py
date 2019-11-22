@@ -110,9 +110,9 @@ if __name__=="__main__":
     parser.add_argument("-c","--config",help="config file",required=True)
     parser.add_argument("-t","--type",help="gatk or vardict",choices=["GATK","vardict"],required=True)
     args=parser.parse_args()
-    if type=="GATK":
+    if args.type=="GATK":
         GATK(args.prefix,args.vcf,args.outdir,args.prefix,args.config)
-    if type=="vardict":
+    if args.type=="vardict":
         vardict(args.prefix,args.vcf,args.outdir,args.prefix)
 """
 ####Decompose multiallelic variants in a VCF file.
