@@ -15,11 +15,10 @@ class Myconf(configparser.ConfigParser):
 
     def optionxform(self, optionstr):
         return optionstr
-######################################
-#project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
-######################################
 
 def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
+    start=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
+    print(start)
     config = Myconf()
     config.read(configfile)
     project =name
@@ -160,6 +159,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
         core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf")
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
+    end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
+    print(end)
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
     parser.add_argument("-r",'--rundir',help="bcl directory",required=True)
