@@ -96,10 +96,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
     if not os.path.exists("%s/SNV_indel/"%(out)):
         os.mkdir("%s/SNV_indel/"%(out))
     for prefix in sampleID:
-        if method=="GATK":
+        if method=="GATK" or method=="all":
             out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
                             %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
-        else:
+        if method == "vardict" or method == "all":
             out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"
                             %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
     out_shell.close()
@@ -143,7 +143,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
                             % (python3, dir_name, out, prefix, prefix, out, prefix, prefix, configfile))
         if method == "vardict" or method == 'all':
             out_shell.write(
-                "%s %s/core/normalize_vcf.py -v %s/SNV_indel/vardict/%s/%s.filtered.pass.vcf -o %s/anno/vardict/%s -p %s -c %s -t vardict && "
+                "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.vardict.vcf -o %s/anno/vardict/%s -p %s -c %s -t vardict && "
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
         ###################anno
         out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/vardict/%s/%s.normalize.vcf -o %s/anno/vardict/%s -p %s -c %s && "
