@@ -161,6 +161,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
     #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
+
+
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
     parser.add_argument("-r",'--rundir',help="bcl directory",required=True)
