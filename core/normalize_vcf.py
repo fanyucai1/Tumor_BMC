@@ -10,7 +10,7 @@ class Myconf(configparser.ConfigParser):
     def optionxform(self, optionstr):
         return optionstr
 
-def GATK(tumor_name,vcf,outdir,prefix,configfile):
+def GATK_run(tumor_name,vcf,outdir,prefix,configfile):
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     config = Myconf()
@@ -54,7 +54,7 @@ def GATK(tumor_name,vcf,outdir,prefix,configfile):
     outfile.close()
     subprocess.check_call("rm %s/%s.tmp.vcf"%(outdir,prefix),shell=True)
 
-def vardict(tumor, vcf, outdir,prefix):
+def vardict_run(tumor, vcf, outdir,prefix):
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     infile=open(vcf,"r")
@@ -111,9 +111,9 @@ if __name__=="__main__":
     parser.add_argument("-t","--type",help="gatk or vardict",choices=["GATK","vardict"],required=True)
     args=parser.parse_args()
     if args.type=="GATK":
-        GATK(args.prefix,args.vcf,args.outdir,args.prefix,args.config)
+        GATK_run(args.prefix,args.vcf,args.outdir,args.prefix,args.config)
     if args.type=="vardict":
-        vardict(args.prefix,args.vcf,args.outdir,args.prefix)
+        vardict_run(args.prefix,args.vcf,args.outdir,args.prefix)
 """
 ####Decompose multiallelic variants in a VCF file.
 bcftools norm -f human_g1k_v37.fasta -o ex1.step2.vcf ex1.step1.vcf
