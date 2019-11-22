@@ -130,6 +130,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
     if not os.path.exists("%s/anno/"%(out)):
         os.mkdir("%s/anno/"%(out))
     for prefix in sampleID:
+        ###################format vcf
         if method=="GATK":
             out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK && "
                             %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
@@ -137,8 +138,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
             out_shell.write(
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t vardict\n"
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
+        ###################anno
         out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/%s/%s.normalize.vcf -o %s/anno/%s -p %s -c %s && "
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
+        ###################filter anno
         out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/%s/%s.annovar.tsv -o %s/anno/%s -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
