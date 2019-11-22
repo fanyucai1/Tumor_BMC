@@ -106,12 +106,12 @@ if __name__=="__main__":
     parser.add_argument("-o","--outdir",help="output directory",required=True)
     parser.add_argument("-p","--prefix",help="prefix of output",required=True)
     parser.add_argument("-c","--config",help="config file",required=True)
-    parser.add_argument("-t","--type",help="gatk or vardict",choices=["gatk","vardict"],required=True)
+    parser.add_argument("-t","--type",help="gatk or vardict",choices=["GATK","vardict"],required=True)
     args=parser.parse_args()
-    if type=="gatk":
-        GATK(args.vcf,args.outdir,args.prefix,args.config)
+    if type=="GATK":
+        GATK(args.prefix,args.vcf,args.outdir,args.prefix,args.config)
     if type=="vardict":
-        vardict(args.vcf,args.outdir,args.prefix)
+        vardict(args.prefix,args.vcf,args.outdir,args.prefix)
 """
 ####Decompose multiallelic variants in a VCF file.
 bcftools norm -f human_g1k_v37.fasta -o ex1.step2.vcf ex1.step1.vcf

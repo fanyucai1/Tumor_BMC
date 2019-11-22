@@ -19,7 +19,7 @@ class Myconf(configparser.ConfigParser):
 #project=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
 ######################################
 
-def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
+def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
     config = Myconf()
     config.read(configfile)
     project =name
@@ -96,8 +96,11 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     if not os.path.exists("%s/SNV_indel/"%(out)):
         os.mkdir("%s/SNV_indel/"%(out))
     for prefix in sampleID:
-        out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
-                        %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
+        if method=="GATK":
+            out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
+                            %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
+        else:
+            out_shell.write()
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
         core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel')
@@ -126,7 +129,14 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell = open("%s/shell/anno.9.sh" % (out), "w")
     if not os.path.exists("%s/anno/"%(out)):
         os.mkdir("%s/anno/"%(out))
-
+    for prefix in sampleID:
+        if method=="GATK":
+            out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t GATK")
+        else:
+            pass
+    out_shell.close()
+    if not os.path.exists("%s/shell/anno.log"%(out)):
+        subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")
@@ -137,5 +147,6 @@ if __name__=="__main__":
     parser.add_argument("-p","--probe",help="probe bed",default="0")
     parser.add_argument("-c","--config",help="config file",required=True)
     parser.add_argument("-n","--name",help="project name",required=True)
+    parser.add_argument("-m",'--method',help="GATK or vardict",choices=["GATK","vardict"],required=True)
     args=parser.parse_args()
-    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name)
+    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name,args.method)
