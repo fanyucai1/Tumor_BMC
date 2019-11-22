@@ -106,22 +106,27 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name):
     out_shell = open("%s/shell/metrix.7.sh" % (out), "w")
     if not os.path.exists("%s/QC/"%(out)):
         os.mkdir("%s/QC/"%(out))
-        out_shell.write("%s %s/core/metrix.py %s/fastq_qc/ %s/mapping/ %s/QC/"
-                        %(python3,dir_name,out,out,out))
+    out_shell.write("%s %s/core/metrix.py %s/fastq_qc/ %s/mapping/ %s/QC/"%(python3,dir_name,out,out,out))
     out_shell.close()
+    if not os.path.exists("%s/shell/metrix.log"%(out)):
+        core.set_use_parallel.run("%s/shell/metrix.7.sh" % (out), "metrix")
+        subprocess.check_call('echo done >%s/shell/metrix.log'%(out),shell=True)
     #######################################fusion
     out_shell = open("%s/shell/fusion.8.sh" % (out), "w")
     if not os.path.exists("%s/fusion/"%(out)):
         os.mkdir("%s/fusion/"%(out))
     for prefix in sampleID:
-        out_shell.write("%s %s/core/fusion.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/fusion/%s -p %s -c %s"
+        out_shell.write("%s %s/core/fusion.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/fusion/%s -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
-    #######################################
-    """
-    core.set_use_parallel.run("%s/shell/metrix.7.s" % (out),"metrix")
-    core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out),"Gene fusion")
-    """
+    if not os.path.exists("%s/shell/fusion.log"%(out)):
+        core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion")
+        subprocess.check_call("echo done >%s/shell/fusion.log"%(out),shell=True)
+    #########################################format vcf
+    out_shell = open("%s/shell/anno.9.sh" % (out), "w")
+    if not os.path.exists("%s/anno/"%(out)):
+        os.mkdir("%s/anno/"%(out))
+
     #########################################
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run tumor only analysis\n")

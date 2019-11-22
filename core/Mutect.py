@@ -37,11 +37,11 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
     subprocess.check_call(cmd,shell=True)
     cmd="%s -Xmx40G -jar %s FilterMutectCalls -unique 5 --min-reads-per-strand 1 -R %s -V %s.vcf.gz -O %s.filtered.vcf.gz"%(java,gatk4,hg19_ref,out,out)
     subprocess.check_call(cmd,shell=True)
+    cmd="%s -Xmx40G -jar %s SelectVariants -R %s -V %s.filtered.vcf.gz -O %s.filtered.pass.vcf --exclude-filtered"\
+        %(java,gatk4,hg19_ref,out,out)
+    subprocess.check_call(cmd,shell=True)
     end=time.time()
     print("Elapse time is %g seconds" % (end - start))
-
-
-
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser("Run GATK Mutect")
