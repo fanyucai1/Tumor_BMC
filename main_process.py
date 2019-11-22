@@ -161,8 +161,19 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf")
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
+    if cnvkit!="0":
+        if not os.path.exists("%s/cnv"%(out)):
+            os.mkdir("%s/cnv"%(out))
+        out_shell = open("%s/shell/cnv.10.sh" % (out), "w")
+        for prefix in sampleID:
+            out_shell.write("%s %s/core/cnvkit.py --bam %s/mapping/%s/%s.recal.bam --control %s --bed %s --outdir %s/cnv --config %s"
+                            %(python3,dir_name,out,prefix,prefix,cnvkit,target,out,configfile))
+        out_shell.close()
+        if not os.path.exists("%s/shell/cnv.log" % (out)):
+            core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit")
+            subprocess.check_call("echo done >%s/shell/cnv.log"%(out),shell=True)
+    #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
-    
     print("##################Project %s finished time: %s###############################" % (name, end))
 
 
