@@ -11,6 +11,8 @@ class Myconf(configparser.ConfigParser):
         return optionstr
 
 def GATK(tumor_name,vcf,outdir,prefix,configfile):
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
     config = Myconf()
     config.read(configfile)
     java = config.get('software', 'java')
