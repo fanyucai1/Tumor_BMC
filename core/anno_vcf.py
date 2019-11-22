@@ -104,16 +104,16 @@ def run(vcf,outdir,prefix,configfile):
                 if l == 0:
                     outfile.write("%s" % (array[dict[out_name[l]]]))
                 elif out_name[l] == "Var":
-                    tmp_num = float(Var[0]) * 100
+                    tmp_num = float(Var) * 100
                     outfile.write("\t%.2f" % (tmp_num) + "%")
                 elif out_name[l] == "Alt_Reads":
-                    outfile.write("\t%s" % (Alt_Reads[0]))
+                    outfile.write("\t%s" % (Alt_Reads))
                 elif out_name[l] == "Ref_Reads":
-                    outfile.write("\t%s" % (Ref_Reads[0]))
+                    outfile.write("\t%s" % (Ref_Reads))
                 elif out_name[l] == "AAChange.1":
                     outfile.write("\t%s" % (run_hgvs(final_nm)))
                 elif out_name[l] == "GT":
-                    outfile.write("\t%s" % (GT[0]))
+                    outfile.write("\t%s" % (GT))
                 else:
                     outfile.write("\t%s" % (array[dict[out_name[l]]]))
             outfile.write("\n")
