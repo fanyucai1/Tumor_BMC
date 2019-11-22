@@ -2,6 +2,8 @@ import subprocess
 import sys
 import argparse
 import configparser
+import os
+
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         configparser.ConfigParser.__init__(self, defaults=defaults)
@@ -10,6 +12,8 @@ class Myconf(configparser.ConfigParser):
         return optionstr
 
 def run(vaf,bamfile,bedfile,prefix,outdir,configfile):
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
     config = Myconf()
     config.read(configfile)
     ref = config.get('database', 'hg19_ref')
