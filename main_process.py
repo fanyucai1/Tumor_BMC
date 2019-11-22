@@ -160,5 +160,6 @@ if __name__=="__main__":
     parser.add_argument("-c","--config",help="config file",required=True)
     parser.add_argument("-n","--name",help="project name",required=True)
     parser.add_argument("-m",'--method',help="GATK or vardict",choices=["GATK","vardict"],required=True)
+    parser.add_argument("-v","--vaf",help="vaf",default=0,required=True)
     args=parser.parse_args()
-    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name,args.method)
+    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name,args.method,args.vaf)
