@@ -16,7 +16,7 @@ class Myconf(configparser.ConfigParser):
     def optionxform(self, optionstr):
         return optionstr
 
-def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
+def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cnvkit):
     start=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s start time:%s###############################"%(name,start))
     config = Myconf()
@@ -96,8 +96,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
         os.mkdir("%s/SNV_indel/"%(out))
     for prefix in sampleID:
         if method=="GATK" or method=="all":
-            out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n"
-                            %(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix))
+            if pon!="0":
+                out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
+            else:
+                out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s\n" % (python3, dir_name, out, prefix, prefix, prefix, target, configfile, out, prefix))
         if method == "vardict" or method == "all":
             out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"
                             %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
@@ -160,6 +162,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf):
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
+    
     print("##################Project %s finished time: %s###############################" % (name, end))
 
 
@@ -174,6 +177,7 @@ if __name__=="__main__":
     parser.add_argument("-n","--name",help="project name",required=True)
     parser.add_argument("-m",'--method',help="GATK,vardict or all",choices=["GATK","vardict","all"],required=True)
     parser.add_argument("-v","--vaf",help="variant allele frequency,default:0.001",default=0.001,required=True)
-    parser.add_argument("-n","--pon",help="")
+    parser.add_argument("-n","--pon",help="panel of normals vcf",default="0")
+    parser.add_argument("-k","--cnvkit",help="control directory contains normal bams",default="0")
     args=parser.parse_args()
-    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name,args.method,args.vaf)
+    run(args.outdir,args.SampleSheet,args.rundir,args.config,args.target,args.probe,args.name,args.method,args.vaf,args.pon,args.cnvkit)
