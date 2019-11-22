@@ -1,6 +1,5 @@
 import subprocess
 import argparse
-import sys
 import glob
 import configparser
 class Myconf(configparser.ConfigParser):
