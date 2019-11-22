@@ -125,7 +125,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
     if not os.path.exists("%s/shell/fusion.log"%(out)):
         core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion")
         subprocess.check_call("echo done >%s/shell/fusion.log"%(out),shell=True)
-    #########################################format vcf
+    #########################################anno vcf
     out_shell = open("%s/shell/anno.9.sh" % (out), "w")
     if not os.path.exists("%s/anno/"%(out)):
         os.mkdir("%s/anno/"%(out))
@@ -137,7 +137,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method):
             out_shell.write(
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/%s -p %s -c %s -t vardict\n"
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
-        out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/%s/%s.normalize.vcf -o %s/anno/%s -p %s -c %s\n"
+        out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/%s/%s.normalize.vcf -o %s/anno/%s -p %s -c %s && "
+                        %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
+        out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/%s/%s.annovar.tsv -o %s/anno/%s -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
