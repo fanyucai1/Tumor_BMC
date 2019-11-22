@@ -17,7 +17,7 @@ def run(vaf,bamfile,bedfile,prefix,outdir,configfile):
     config.read(configfile)
     ref = config.get('database', 'hg19_ref')
     vardict=config.get('software','vardict')
-    cmd="export PATH=%s:$PATH && VarDict -U -th 10 -q 20 -Q 20 -G %s -f %s -N %s -b %s -z -c 1 -S 2 -E 3 -g 4 %s | teststrandbias.R | var2vcf_valid.pl -d 50 -m 4.25 -N %s -E -f %s >%s/%s.vardict.vcf" \
+    cmd="export PATH=%s:$PATH && VarDict -U -th 10 -r 5 -q 20 -Q 20 -G %s -f %s -N %s -b %s -z -c 1 -S 2 -E 3 -g 4 %s | teststrandbias.R | var2vcf_valid.pl -d 50 -m 4.25 -N %s -E -f %s >%s/%s.vardict.vcf" \
         %(vardict,ref,vaf,prefix,bamfile,bedfile,prefix,vaf,outdir,prefix)
     subprocess.check_call(cmd,shell=True)
 if __name__=="__main__":
