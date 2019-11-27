@@ -182,7 +182,7 @@ if __name__=="__main__":
     parser.add_argument("-t","--target",help="target bed file",required=True)
     parser.add_argument("-p","--probe",help="probe bed",default="0")
     parser.add_argument("-c","--config",help="config file",required=True)
-    parser.add_argument("-n","--name",help="project name",required=True)
+    parser.add_argument("-a","--name",help="project name",required=True)
     parser.add_argument("-m",'--method',help="GATK,vardict or all",choices=["GATK","vardict","all"],required=True)
     parser.add_argument("-v","--vaf",help="variant allele frequency,default:0.001",default=0.001,required=True)
     parser.add_argument("-n","--pon",help="panel of normals vcf",default="0")
