@@ -50,7 +50,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
             tmp=os.path.join(root,file)
             if tmp.endswith("_R1_001.fastq.gz"):
                 for prefix in sampleID:
-                    if re.search('%s'%(prefix),tmp):
+                    if re.search('%s_'%(prefix),tmp):
                         R1=tmp
                         R2=tmp.replace("_R1_","_R2_")
                         out_shell.write("%s %s/core/fastq_qc.py -p1 %s -p2 %s -o %s/fastq_qc/%s -p %s -l %s -c %s\n"
