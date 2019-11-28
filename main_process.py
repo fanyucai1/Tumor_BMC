@@ -77,7 +77,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,target,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/BQSR.log" % (out)):
-        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR",3)
+        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR",5)
         subprocess.check_call('echo BQSR done >%s/shell/BQSR.log' % (out), shell=True)
     #######################################bam stat
     out_shell = open("%s/shell/bam.qc.5.sh" % (out), "w")
@@ -155,7 +155,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
-        core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf",10)
+        core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf",20)
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
     if cnvkit!="0":
