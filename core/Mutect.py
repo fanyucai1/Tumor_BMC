@@ -30,14 +30,14 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
     if normal_bam!="0":
         par+=" -I %s "%(normal_bam)
     if bed!="0":
-        cmd="%s -Xmx40G -jar %s BedToIntervalList -I %s -O %s.interval_list -SD %s"%(java,gatk4,bed,out,hg19_ref)
+        cmd="%s -Xmx10G -jar %s BedToIntervalList -I %s -O %s.interval_list -SD %s"%(java,gatk4,bed,out,hg19_ref)
         subprocess.check_call(cmd,shell=True)
         par+=" -L %s.interval_list "%(out)
-    cmd="%s -Xmx40G -jar %s Mutect2 -I %s -tumor %s %s -O %s.vcf.gz"%(java,gatk4,tumor_bam,tumor_name,par,out)
+    cmd="%s -Xmx10G -jar %s Mutect2 -I %s -tumor %s %s -O %s.vcf.gz"%(java,gatk4,tumor_bam,tumor_name,par,out)
     subprocess.check_call(cmd,shell=True)
-    cmd="%s -Xmx40G -jar %s FilterMutectCalls -unique 5 --min-reads-per-strand 1 -R %s -V %s.vcf.gz -O %s.filtered.vcf.gz"%(java,gatk4,hg19_ref,out,out)
+    cmd="%s -Xmx10G -jar %s FilterMutectCalls -unique 5 --min-reads-per-strand 1 -R %s -V %s.vcf.gz -O %s.filtered.vcf.gz"%(java,gatk4,hg19_ref,out,out)
     subprocess.check_call(cmd,shell=True)
-    cmd="%s -Xmx40G -jar %s SelectVariants -R %s -V %s.filtered.vcf.gz -O %s.filtered.pass.vcf --exclude-filtered"\
+    cmd="%s -Xmx10G -jar %s SelectVariants -R %s -V %s.filtered.vcf.gz -O %s.filtered.pass.vcf --exclude-filtered"\
         %(java,gatk4,hg19_ref,out,out)
     subprocess.check_call(cmd,shell=True)
     end=time.time()

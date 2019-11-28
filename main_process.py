@@ -77,7 +77,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,target,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/BQSR.log" % (out)):
-        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR",5)
+        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR",10)
         subprocess.check_call('echo BQSR done >%s/shell/BQSR.log' % (out), shell=True)
     #######################################bam stat
     out_shell = open("%s/shell/bam.qc.5.sh" % (out), "w")
@@ -88,7 +88,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,target,probe,configfile,out,prefix,prefix,out,prefix,prefix))
     out_shell.close()
     if not os.path.exists("%s/shell/bam.qc.log"%(out)):
-        core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out), "bam stat",5)
+        core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out), "bam stat",10)
         subprocess.check_call('echo bam stat done >%s/shell/bam.qc.log' % (out), shell=True)
     #######################################call SNV and Indel
     out_shell = open("%s/shell/SNV_indel.6.sh" % (out), "w")
