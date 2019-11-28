@@ -39,7 +39,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                     %(python3,dir_name,SampleSheet,out,rundir,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/bcl2fastq.log"%(out)):
-        core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq")
+        core.set_use_parallel.run("%s/shell/bcl2fastq.1.sh"%(out),"bcl2fastq",1)
         subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     #######################################run fastq quality control
     out_shell=open("%s/shell/fastq_qc.2.sh"%(out),"w")
@@ -57,7 +57,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                                         %(python3,dir_name,R1,R2,out,prefix,prefix,75,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/fastq_qc.log"%(out)):
-        core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc")
+        core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc",10)
         subprocess.check_call('echo fastq_qc done >%s/shell/fastq_qc.log' % (out), shell=True)
     #######################################bwa_picard
     out_shell = open("%s/shell/mapping.3.sh" % (out), "w")
@@ -68,7 +68,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/mapping.log"%(out)):
-        core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out), "mapping")
+        core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out), "mapping",3)
         subprocess.check_call('echo mapping done >%s/shell/mapping.log'%(out),shell=True)
     #######################################BQSR
     out_shell = open("%s/shell/BQSR.4.sh" % (out), "w")
@@ -77,7 +77,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,target,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/BQSR.log" % (out)):
-        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR")
+        core.set_use_parallel.run("%s/shell/BQSR.4.sh" % (out), "BQSR",3)
         subprocess.check_call('echo BQSR done >%s/shell/BQSR.log' % (out), shell=True)
     #######################################bam stat
     out_shell = open("%s/shell/bam.qc.5.sh" % (out), "w")
@@ -88,7 +88,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,target,probe,configfile,out,prefix,prefix,out,prefix,prefix))
     out_shell.close()
     if not os.path.exists("%s/shell/bam.qc.log"%(out)):
-        core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out), "bam stat")
+        core.set_use_parallel.run("%s/shell/bam.qc.5.sh" % (out), "bam stat",5)
         subprocess.check_call('echo bam stat done >%s/shell/bam.qc.log' % (out), shell=True)
     #######################################call SNV and Indel
     out_shell = open("%s/shell/SNV_indel.6.sh" % (out), "w")
@@ -102,7 +102,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
-        core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel')
+        core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel',5)
         subprocess.check_call('echo done >%s/shell/SNV_indel.log'%(out),shell=True)
     #######################################metrix
     out_shell = open("%s/shell/metrix.7.sh" % (out), "w")
@@ -111,7 +111,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
     out_shell.write("%s %s/core/metrix.py %s/fastq_qc/ %s/mapping/ %s/QC/"%(python3,dir_name,out,out,out))
     out_shell.close()
     if not os.path.exists("%s/shell/metrix.log"%(out)):
-        core.set_use_parallel.run("%s/shell/metrix.7.sh" % (out), "metrix")
+        core.set_use_parallel.run("%s/shell/metrix.7.sh" % (out), "metrix",1)
         subprocess.check_call('echo done >%s/shell/metrix.log'%(out),shell=True)
     #######################################fusion
     out_shell = open("%s/shell/fusion.8.sh" % (out), "w")
@@ -122,7 +122,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/fusion.log"%(out)):
-        core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion")
+        core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion",10)
         subprocess.check_call("echo done >%s/shell/fusion.log"%(out),shell=True)
     #########################################anno vcf
     out_shell = open("%s/shell/anno.9.sh" % (out), "w")
@@ -155,7 +155,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
-        core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf")
+        core.set_use_parallel.run("%s/shell/anno.9.sh" % (out),"anno vcf",10)
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
     if cnvkit!="0":
@@ -167,7 +167,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             %(python3,dir_name,out,prefix,prefix,cnvkit,target,out,configfile))
         out_shell.close()
         if not os.path.exists("%s/shell/cnv.log" % (out)):
-            core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit")
+            core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit",5)
             subprocess.check_call("echo done >%s/shell/cnv.log"%(out),shell=True)
     #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
