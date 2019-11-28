@@ -36,16 +36,16 @@ def run(bam,outdir,bed,configfile,prefix):
     start=time.time()
     ####################Realign Indels - Realignment
     out=outdir+"/"+prefix
-    cmd="%s -Xmx40G -jar %s -T RealignerTargetCreator -nt 20 -R %s -I %s -known %s -known %s -o %s.target.list %s" \
+    cmd="%s -Xmx10G -jar %s -T RealignerTargetCreator -nt 20 -R %s -I %s -known %s -known %s -o %s.target.list %s" \
         %(java,gatk3,hg19_ref,bam,phase1_indel,mill_indel,out,par)
     subprocess.check_call(cmd,shell=True)
-    cmd="%s -Xmx40G -jar %s -T IndelRealigner -R %s -I %s -targetIntervals %s.target.list -known %s -known %s -o %s.realign.bam" \
+    cmd="%s -Xmx10G -jar %s -T IndelRealigner -R %s -I %s -targetIntervals %s.target.list -known %s -known %s -o %s.realign.bam" \
         %(java,gatk3,hg19_ref,bam,out,phase1_indel,mill_indel,out)
     subprocess.check_call(cmd,shell=True)
     ####################Recalibrate Bases
-    subprocess.check_call("%s -Xmx40G -jar %s BaseRecalibrator --use-original-qualities -R %s -I %s.realign.bam --known-sites %s --known-sites %s -O %s.recal_data.table %s"
+    subprocess.check_call("%s -Xmx10G -jar %s BaseRecalibrator --use-original-qualities -R %s -I %s.realign.bam --known-sites %s --known-sites %s -O %s.recal_data.table %s"
                           %(java,gatk4,hg19_ref,out,dbsnp138,mill_indel,out,par),shell=True)
-    subprocess.check_call("%s -Xmx40G -jar %s ApplyBQSR -R %s -I %s.realign.bam --bqsr-recal-file %s.recal_data.table -O %s.recal.bam && rm %s.realign.bai %s.realign.bam %s.target.list %s.recal_data.table"
+    subprocess.check_call("%s -Xmx10G -jar %s ApplyBQSR -R %s -I %s.realign.bam --bqsr-recal-file %s.recal_data.table -O %s.recal.bam && rm %s.realign.bai %s.realign.bam %s.target.list %s.recal_data.table"
                           %(java,gatk4,hg19_ref,out,out,out,out,out,out,out),shell=True)
     end=time.time()
     print("Elapse time is %g seconds" %(end-start))
