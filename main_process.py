@@ -102,7 +102,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
-        core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel',5)
+        core.set_use_parallel.run("%s/shell/SNV_indel.6.sh" % (out), 'Call snv and indel',10)
         subprocess.check_call('echo done >%s/shell/SNV_indel.log'%(out),shell=True)
     #######################################metrix
     out_shell = open("%s/shell/metrix.7.sh" % (out), "w")
@@ -167,7 +167,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             %(python3,dir_name,out,prefix,prefix,cnvkit,target,out,configfile))
         out_shell.close()
         if not os.path.exists("%s/shell/cnv.log" % (out)):
-            core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit",5)
+            core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit",10)
             subprocess.check_call("echo done >%s/shell/cnv.log"%(out),shell=True)
     #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
