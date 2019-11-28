@@ -68,7 +68,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/mapping.log"%(out)):
-        core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out), "mapping",3)
+        core.set_use_parallel.run("%s/shell/mapping.3.sh" % (out), "mapping",5)
         subprocess.check_call('echo mapping done >%s/shell/mapping.log'%(out),shell=True)
     #######################################BQSR
     out_shell = open("%s/shell/BQSR.4.sh" % (out), "w")
