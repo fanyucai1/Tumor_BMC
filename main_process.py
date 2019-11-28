@@ -57,7 +57,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                                         %(python3,dir_name,R1,R2,out,prefix,prefix,75,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/fastq_qc.log"%(out)):
-        core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc",10)
+        core.set_use_parallel.run("%s/shell/fastq_qc.2.sh" % (out), "fastq_qc",20)
         subprocess.check_call('echo fastq_qc done >%s/shell/fastq_qc.log' % (out), shell=True)
     #######################################bwa_picard
     out_shell = open("%s/shell/mapping.3.sh" % (out), "w")
@@ -122,7 +122,7 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/fusion.log"%(out)):
-        core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion",10)
+        core.set_use_parallel.run("%s/shell/fusion.8.sh" % (out), "Gene fusion",20)
         subprocess.check_call("echo done >%s/shell/fusion.log"%(out),shell=True)
     #########################################anno vcf
     out_shell = open("%s/shell/anno.9.sh" % (out), "w")
