@@ -26,6 +26,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
     #######################################get sampleID
     sampleID=core.parse_samplesheet.run(SampleSheet)
     #######################################
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
     out=outdir+"/"+project
     if not os.path.exists(out):
         os.makedirs(out)
