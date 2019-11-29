@@ -18,6 +18,8 @@ class Myconf(configparser.ConfigParser):
 
 def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cnvkit):
     start=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
     print("##################Project %s start time:%s###############################"%(name,start))
     config = Myconf()
     config.read(configfile)
