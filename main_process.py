@@ -26,11 +26,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
     #######################################get sampleID
     sampleID=core.parse_samplesheet.run(SampleSheet)
     #######################################
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
     out=outdir+"/"+project
     if not os.path.exists(out):
-        os.mkdir(out)
+        os.makedirs(out)
     if not os.path.exists("%s/shell"%(out)):
         os.mkdir("%s/shell"%(out))
     #######################################bcl2fastq
