@@ -178,9 +178,16 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         for file in files:
             tmp=os.path.join(root,file)
             sample=tmp.split("/")[-2]
-            if re.search('GATK',tmp):
+            if method=="all" or method=="GATK":
                 if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
-                    core.copy_result.run(tmp,)
+                    core.copy_result.run(tmp,"/media/CAP/%s/SNV_indel/GATK/"%(sample))
+            if method=="all" or method=="vardict":
+                if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
+                    core.copy_result.run(tmp, "/media/CAP/%s/SNV_indel/vardict/" % (sample))
+            if tmp.endswith("MetricsReport.tsv"):
+                core.copy_result.run(tmp, "/media/CAP/%s/qc/" % (sample))
+            if tmp.endswith("%s.tsv"%(sample)) and tmp.split("/")[-2]=="fusion":
+                core.copy_result.run(tmp, "/media/CAP/%s/fusion/" % (sample))
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
 
