@@ -44,13 +44,15 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         subprocess.check_call('sh %s/shell/bcl2fastq.1.sh'%(out),shell=True)
         subprocess.check_call('echo bcl2fastq done >%s/shell/bcl2fastq.log'%(out),shell=True)
     #######################################run fastq quality control
-    out_shell=open("%s/shell/pre.2.sh"%(out),"w")
     if not os.path.exists("%s/fastq_qc/"%(out)):
         os.makedirs("%s/fastq_qc/"%(out))
     if not os.path.exists("%s/mapping/"%(out)):
         os.makedirs("%s/mapping/"%(out))
     if not os.path.exists("%s/SNV_indel/"%(out)):
         os.makedirs("%s/SNV_indel/"%(out))
+    if not os.path.exists("%s/fusion/"%(out)):
+        os.makedirs("%s/fusion/"%(out))
+    out_shell=open("%s/shell/pre.2.sh"%(out),"w")
     for (root,dirs,files) in os.walk("%s/validate_fastq" % (out)):
         for file in files:
             tmp=os.path.join(root,file)
@@ -71,6 +73,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         out_shell.write(
                             "%s %s/core/bam_qc.py -t %s -r %s -c %s -o %s/mapping/%s -p %s -b %s/mapping/%s/%s.recal.bam && "
                             % (python3, dir_name, target, probe, configfile, out, prefix, prefix, out, prefix, prefix))
+                        out_shell.write(
+                            "%s %s/core/fusion.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/fusion/%s -p %s -c %s && "
+                            % (python3, dir_name, out, prefix, prefix, out, prefix, prefix, out, prefix, prefix,configfile))
                         if method=="GATK":
                             out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
                         elif method == "vardict":
@@ -87,27 +92,16 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         core.set_use_parallel.run("%s/shell/pre.2.sh" % (out), 'Call snv and indel',8)
         subprocess.check_call('echo done >%s/shell/pre.log'%(out),shell=True)
     #######################################metrix
-    out_shell = open("%s/shell/metrix.4.sh" % (out), "w")
+    out_shell = open("%s/shell/metrix.3.sh" % (out), "w")
     if not os.path.exists("%s/QC/"%(out)):
         os.mkdir("%s/QC/"%(out))
     out_shell.write("%s %s/core/metrix.py %s/fastq_qc/ %s/mapping/ %s/QC/"%(python3,dir_name,out,out,out))
     out_shell.close()
     if not os.path.exists("%s/shell/metrix.log"%(out)):
-        core.set_use_parallel.run("%s/shell/metrix.4.sh" % (out), "metrix",1)
+        core.set_use_parallel.run("%s/shell/metrix.3.sh" % (out), "metrix",1)
         subprocess.check_call('echo done >%s/shell/metrix.log'%(out),shell=True)
-    #######################################fusion
-    out_shell = open("%s/shell/fusion.5.sh" % (out), "w")
-    if not os.path.exists("%s/fusion/"%(out)):
-        os.mkdir("%s/fusion/"%(out))
-    for prefix in sampleID:
-        out_shell.write("%s %s/core/fusion.py -p1 %s/fastq_qc/%s/%s_R1_001.fastq.gz -p2 %s/fastq_qc/%s/%s_R2_001.fastq.gz -o %s/fusion/%s -p %s -c %s\n"
-                        %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,out,prefix,prefix,configfile))
-    out_shell.close()
-    if not os.path.exists("%s/shell/fusion.log"%(out)):
-        core.set_use_parallel.run("%s/shell/fusion.5.sh" % (out), "Gene fusion",20)
-        subprocess.check_call("echo done >%s/shell/fusion.log"%(out),shell=True)
     #########################################anno vcf
-    out_shell = open("%s/shell/anno.6.sh" % (out), "w")
+    out_shell = open("%s/shell/anno.4.sh" % (out), "w")
     if not os.path.exists("%s/anno/"%(out)):
         os.mkdir("%s/anno/"%(out))
     for prefix in sampleID:
@@ -137,19 +131,19 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
-        core.set_use_parallel.run("%s/shell/anno.6.sh" % (out),"anno vcf",20)
+        core.set_use_parallel.run("%s/shell/anno.4.sh" % (out),"anno vcf",20)
         subprocess.check_call("echo done >%s/shell/anno.log" % (out), shell=True)
     #########################################
     if cnvkit!="0":
         if not os.path.exists("%s/cnv"%(out)):
             os.mkdir("%s/cnv"%(out))
-        out_shell = open("%s/shell/cnv.7.sh" % (out), "w")
+        out_shell = open("%s/shell/cnv.5.sh" % (out), "w")
         for prefix in sampleID:
             out_shell.write("%s %s/core/cnvkit.py --bam %s/mapping/%s/%s.recal.bam --control %s --bed %s --outdir %s/cnv --config %s"
                             %(python3,dir_name,out,prefix,prefix,cnvkit,target,out,configfile))
         out_shell.close()
         if not os.path.exists("%s/shell/cnv.log" % (out)):
-            core.set_use_parallel.run("%s/shell/cnv.7.sh" % (out),"cnvkit",10)
+            core.set_use_parallel.run("%s/shell/cnv.5.sh" % (out),"cnvkit",10)
             subprocess.check_call("echo done >%s/shell/cnv.log"%(out),shell=True)
     #########################################
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
