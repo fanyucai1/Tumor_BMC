@@ -21,8 +21,8 @@ def run(pe1,pe2,prefix,outdir,configfile):
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     out=outdir+"/"+prefix
-    cmd="%s -t 8 -u 5 -r %s -f %s -1 %s -2 %s -h %s.html >%s.result" \
-        %(genefuse,ref,list,pe1,pe2,out,out)
+    cmd="%s -t 8 -u 5 -r %s -f %s -1 %s -2 %s -h %s.html -j %s.json > %s.result" \
+        %(genefuse,ref,list,pe1,pe2,out,out,out)
     subprocess.check_call(cmd,shell=True)
     infile = open("%s.result"%(out), "r")
     outfile = open("%s.tsv" % (out), "w")
