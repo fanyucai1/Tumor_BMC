@@ -149,11 +149,11 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
             out_shell.write(
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.vardict.vcf -o %s/anno/vardict/%s -p %s -c %s -t vardict && "
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
-        ###################anno
-        out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/vardict/%s/%s.normalize.vcf -o %s/anno/vardict/%s -p %s -c %s && "
+            ###################anno
+            out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/vardict/%s/%s.normalize.vcf -o %s/anno/vardict/%s -p %s -c %s && "
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
-        ###################filter anno
-        out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/vardict/%s/%s.annovar.tsv -o %s/anno/vardict/%s -p %s -c %s\n"
+            ###################filter anno
+            out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/vardict/%s/%s.annovar.tsv -o %s/anno/vardict/%s -p %s -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
