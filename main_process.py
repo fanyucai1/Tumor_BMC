@@ -9,6 +9,8 @@ import re
 import time
 import configparser
 import subprocess
+import re
+
 class Myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         configparser.ConfigParser.__init__(self, defaults=defaults)
@@ -172,6 +174,13 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
             core.set_use_parallel.run("%s/shell/cnv.10.sh" % (out),"cnvkit",10)
             subprocess.check_call("echo done >%s/shell/cnv.log"%(out),shell=True)
     #########################################
+    for (root,dirs,files) in os.walk(out):
+        for file in files:
+            tmp=os.path.join(root,file)
+            sample=tmp.split("/")[-2]
+            if re.search('GATK',tmp):
+                if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
+                    core.copy_result.run(tmp,)
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
 

@@ -13,3 +13,5 @@ from . import normalize_vcf
 from . import Mutect
 from . import set_use_parallel
 from . import vardict
+from . import send_email
+from . import copy_result
