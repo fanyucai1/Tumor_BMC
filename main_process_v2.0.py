@@ -83,9 +83,9 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                                 "%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n" % (
                                 python3, dir_name, vaf, out, prefix, prefix, target, configfile, out, prefix, prefix))
     out_shell.close()
-    if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
-        core.set_use_parallel.run("%s/shell/SNV_indel.3.sh" % (out), 'Call snv and indel',10)
-        subprocess.check_call('echo done >%s/shell/SNV_indel.log'%(out),shell=True)
+    if not os.path.exists("%s/shell/pre.log"%(out)):
+        core.set_use_parallel.run("%s/shell/pre.2.sh" % (out), 'Call snv and indel',8)
+        subprocess.check_call('echo done >%s/shell/pre.log'%(out),shell=True)
     #######################################metrix
     out_shell = open("%s/shell/metrix.4.sh" % (out), "w")
     if not os.path.exists("%s/QC/"%(out)):
