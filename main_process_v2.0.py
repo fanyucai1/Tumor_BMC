@@ -82,8 +82,6 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             out_shell.write(
                                 "%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n" % (
                                 python3, dir_name, vaf, out, prefix, prefix, target, configfile, out, prefix, prefix))
-
-    out_shell.write("\n")
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
         core.set_use_parallel.run("%s/shell/SNV_indel.3.sh" % (out), 'Call snv and indel',10)
