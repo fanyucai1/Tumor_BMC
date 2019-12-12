@@ -49,6 +49,8 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         os.makedirs("%s/fastq_qc/"%(out))
     if not os.path.exists("%s/mapping/"%(out)):
         os.makedirs("%s/mapping/"%(out))
+    if not os.path.exists("%s/SNV_indel/"%(out)):
+        os.makedirs("%s/SNV_indel/"%(out))
     for (root,dirs,files) in os.walk("%s/validate_fastq" % (out)):
         for file in files:
             tmp=os.path.join(root,file)
@@ -67,22 +69,21 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                             "%s %s/core/BQSR.py -b %s/mapping/%s/%s.dup.bam -l %s -o %s/mapping/%s/ -p %s -c %s && "
                             % (python3, dir_name, out, prefix, prefix, target, out, prefix, prefix, configfile))
                         out_shell.write(
-                            "%s %s/core/bam_qc.py -t %s -r %s -c %s -o %s/mapping/%s -p %s -b %s/mapping/%s/%s.recal.bam\n"
+                            "%s %s/core/bam_qc.py -t %s -r %s -c %s -o %s/mapping/%s -p %s -b %s/mapping/%s/%s.recal.bam && "
                             % (python3, dir_name, target, probe, configfile, out, prefix, prefix, out, prefix, prefix))
-    out_shell.close()
-    if not os.path.exists("%s/shell/pre.log"%(out)):
-        core.set_use_parallel.run("%s/shell/pre.2.sh" % (out), "pre",20)
-        subprocess.check_call('echo pre done >%s/shell/pre.log' % (out), shell=True)
-    #######################################call SNV and Indel
-    out_shell = open("%s/shell/SNV_indel.3.sh" % (out), "w")
-    if not os.path.exists("%s/SNV_indel/"%(out)):
-        os.mkdir("%s/SNV_indel/"%(out))
-    for prefix in sampleID:
-        if method=="GATK" or method=="all":
-            out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
-        if method == "vardict" or method == "all":
-            out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"
-                            %(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
+                        if method=="GATK":
+                            out_shell.write("%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s\n"%(python3,dir_name,out,prefix,prefix,prefix,target,configfile,out,prefix,pon))
+                        elif method == "vardict":
+                            out_shell.write("%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n"%(python3,dir_name,vaf,out,prefix,prefix,target,configfile,out,prefix,prefix))
+                        else:
+                            out_shell.write(
+                                "%s %s/core/Mutect.py --tbam %s/mapping/%s/%s.recal.bam --tname %s --bed %s --config %s --outdir %s/SNV_indel/%s --pon %s && " % (
+                                python3, dir_name, out, prefix, prefix, prefix, target, configfile, out, prefix, pon))
+                            out_shell.write(
+                                "%s %s/core/vardict.py --vaf %s --bam %s/mapping/%s/%s.recal.bam --bed %s --config %s --outdir %s/SNV_indel/%s --prefix %s\n" % (
+                                python3, dir_name, vaf, out, prefix, prefix, target, configfile, out, prefix, prefix))
+
+    out_shell.write("\n")
     out_shell.close()
     if not os.path.exists("%s/shell/SNV_indel.log"%(out)):
         core.set_use_parallel.run("%s/shell/SNV_indel.3.sh" % (out), 'Call snv and indel',10)
