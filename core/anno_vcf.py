@@ -35,26 +35,38 @@ def run_hgvs(var_site):
     else:
         new2 = new1
     return new2
+
+def sub_transcript(genename,configfile):
+    config = Myconf()
+    config.read(configfile)
+    clinvar = config.get('database', 'Canonical_transcript_file')
+    MSK=config.get('database','msk_transcript')
+    genelist={}
+    infile=open(MSK,"r")
+    for line in infile:
+        line=line.strip()
+        array = re.split("\s", line)
+        genelist[array[0]]=array[1]
+    infile.close()
+    infile=open(clinvar,"r")
+    for line in infile:
+        line=line.strip()
+        array = line.split("\t")
+        if not array[0] in genelist:
+            genelist[array[0]]=array[1].split(".")[0]
+    infile.close()
+    if genename in genelist:
+        return genelist[genename]
+    else:
+        return "no"
+#######################################################################################
 def run(vcf,outdir,prefix,configfile):
     config = Myconf()
     config.read(configfile)
-    Canonical_transcript_file=config.get('database','Canonical_transcript_file')
     annovar=config.get('software','annovar')
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     out=outdir+"/"+prefix
-    #########################get Canonical transcript info
-    transcript={}
-    infile=open(Canonical_transcript_file,"r")
-    for line in infile:
-        line=line.strip()
-        array=line.split("\t")
-        transcript[array[0]]=[]
-        for j in range(len(array)):
-            if j!=0:
-                tmp=array[j].split(".")
-                transcript[array[0]].append(tmp[0])
-    infile.close()
     ##########################run annovar
     par = " -protocol refGene,cytoBand,snp138,avsnp150,exac03,esp6500siv2_all,1000g2015aug_all,1000g2015aug_eas,gnomad211_exome,gnomad211_genome,cosmic88_coding,clinvar_20190305,ljb26_all,intervar_20180118"
     par += ",1000g2015aug_sas,1000g2015aug_afr,1000g2015aug_amr,1000g2015aug_eur "
@@ -86,20 +98,16 @@ def run(vcf,outdir,prefix,configfile):
             Var = array[-1].split(";")[3].split("=")[1]
             ##########################format output knownCanonical transcript
             tmp = array[dict['AAChange.refGene']].split(",")
-            final_nm = ""
-            if array[6] in transcript:
-                for i in transcript[array[6]]:
-                    if final_nm == "":
-                        for k in tmp:
-                            if final_nm=="" and re.search(i,k):
-                                final_nm = k
-                                continue
-                            else:
-                                pass
-                    else:
-                        continue
-            if final_nm=="":
+            final_nm =sub_transcript(array[6],configfile)
+            if array[dict['AAChange.refGene']]==".":
+                final_nm ="."
+            elif final_nm=="no":
                 final_nm=tmp[0]
+            else:
+                for key in tmp:
+                    if re.search("%s"%(final_nm),key):
+                        final_nm=key
+            ##########################
             for l in range(len(out_name)):
                 if l == 0:
                     outfile.write("%s" % (array[dict[out_name[l]]]))
