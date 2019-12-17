@@ -24,7 +24,7 @@ def run(tumor_bam,tumor_name,normal_bam,bed,outdir,configfile,pon):
         os.mkdir(outdir)
     out=outdir+"/"+tumor_name
     par=" -mnp-dist 2 --callable-depth 30 --create-output-bam-index true --min-base-quality-score 20 --native-pair-hmm-threads 8 "
-    par+=" -R %s -bamout %s.bam --germline-resource %s "%(hg19_ref,out,germline_resource)
+    par+=" -R %s -bamout %s.gatk.bam --germline-resource %s "%(hg19_ref,out,germline_resource)
     if pon!="0":
         par+=" -pon %s "%(pon)
     if normal_bam!="0":

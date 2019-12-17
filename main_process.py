@@ -184,6 +184,15 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                 core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (name))
             if tmp.endswith("%s.tsv"%(sample)) and tmp.split("/")[-2]=="fusion":
                 core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/%s/" % (name,sample))
+            if method=="GATK" and tmp.endswith("%s.gatk.bam"%(sample)):
+                bai=tmp.replace('bam','bai')
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/%s/" % (name, sample))
+                core.copy_result.run(bai, "/media/CAP/fyc_test/%s/%s/" % (name, sample))
+            if method=="vardict" and tmp.endswith("%s.recal.bam"%(sample)):
+                bai = tmp.replace('bam', 'bai')
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/%s/" % (name, sample))
+                core.copy_result.run(bai, "/media/CAP/fyc_test/%s/%s/" % (name, sample))
+
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
 
