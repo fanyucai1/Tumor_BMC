@@ -178,10 +178,12 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         for file in files:
             tmp=os.path.join(root,file)
             sample=tmp.split("/")[-2]
-            if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv") or tmp.endswith("MetricsReport.tsv"):
-                    core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (sample))
+            if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/%s/" % (name,sample))
+            if tmp.endswith("MetricsReport.tsv"):
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (name))
             if tmp.endswith("%s.tsv"%(sample)) and tmp.split("/")[-2]=="fusion":
-                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (sample))
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/%s/" % (name,sample))
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
 
