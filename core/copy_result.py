@@ -17,7 +17,7 @@ def run(local_file,To_dir):
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
-    parser.add_argument("-d","--dir",help="directory you want to copy",required=True)
+    parser.add_argument("-d","--dir",help="your destiny directory",required=True)
     parser.add_argument("-f","--file",help="file that you want to copy",required=True)
     args=parser.parse_args()
     run(args.file,args.dir)

@@ -140,10 +140,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
             out_shell.write("%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.filtered.pass.vcf -o %s/anno/GATK/%s -p %s -c %s -t GATK && "
                             %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
             ###################anno
-            out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/GATK/%s/%s.normalize.vcf -o %s/anno/GATK/%s -p %s -c %s && "
+            out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/GATK/%s/%s.normalize.vcf -o %s/anno/GATK/%s -p %s.gatk -c %s && "
                             % (python3, dir_name, out, prefix, prefix, out, prefix, prefix, configfile))
             ###################filter anno
-            out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/GATK/%s/%s.annovar.tsv -o %s/anno/GATK/%s -p %s -c %s\n"
+            out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/GATK/%s/%s.gatk.annovar.tsv -o %s/anno/GATK/%s -p %s.gatk -c %s\n"
                             % (python3, dir_name, out, prefix, prefix, out, prefix, prefix, configfile))
         if method == "vardict" or method == 'all':
             if not os.path.exists("%s/anno/vardict" % (out)):
@@ -152,10 +152,10 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
                 "%s %s/core/normalize_vcf.py -v %s/SNV_indel/%s/%s.vardict.vcf -o %s/anno/vardict/%s -p %s -c %s -t vardict && "
                 % (python3, dir_name, out, prefix,prefix, out, prefix, prefix, configfile))
             ###################anno
-            out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/vardict/%s/%s.normalize.vcf -o %s/anno/vardict/%s -p %s -c %s && "
+            out_shell.write("%s %s/core/anno_vcf.py -v %s/anno/vardict/%s/%s.normalize.vcf -o %s/anno/vardict/%s -p %s.vardict -c %s && "
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
             ###################filter anno
-            out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/vardict/%s/%s.annovar.tsv -o %s/anno/vardict/%s -p %s -c %s\n"
+            out_shell.write("%s %s/core/filter_annovar.py -a %s/anno/vardict/%s/%s.vardict.annovar.tsv -o %s/anno/vardict/%s -p %s.vardict -c %s\n"
                         %(python3,dir_name,out,prefix,prefix,out,prefix,prefix,configfile))
     out_shell.close()
     if not os.path.exists("%s/shell/anno.log"%(out)):
@@ -178,16 +178,12 @@ def run(outdir,SampleSheet,rundir,configfile,target,probe,name,method,vaf,pon,cn
         for file in files:
             tmp=os.path.join(root,file)
             sample=tmp.split("/")[-2]
-            if method=="all" or method=="GATK":
-                if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
-                    core.copy_result.run(tmp,"/media/CAP/%s/SNV_indel/GATK/"%(sample))
-            if method=="all" or method=="vardict":
-                if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
-                    core.copy_result.run(tmp, "/media/CAP/%s/SNV_indel/vardict/" % (sample))
+            if tmp.endswith("annovar.filter.tsv") or tmp.endswith("annovar.tsv"):
+                    core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (sample))
             if tmp.endswith("MetricsReport.tsv"):
-                core.copy_result.run(tmp, "/media/CAP/%s/qc/" % (sample))
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (sample))
             if tmp.endswith("%s.tsv"%(sample)) and tmp.split("/")[-2]=="fusion":
-                core.copy_result.run(tmp, "/media/CAP/%s/fusion/" % (sample))
+                core.copy_result.run(tmp, "/media/CAP/fyc_test/%s/" % (sample))
     end=time.strftime("%Y%m%d_%H:%M:%S", time.localtime())
     print("##################Project %s finished time: %s###############################" % (name, end))
 
