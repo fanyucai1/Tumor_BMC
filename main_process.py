@@ -202,7 +202,7 @@ if __name__=="__main__":
     parser.add_argument("-c","--config",help="config file",required=True)
     parser.add_argument("-a","--name",help="project name",required=True)
     parser.add_argument("-m",'--method',help="GATK,vardict or all",choices=["GATK","vardict","all"],required=True)
-    parser.add_argument("-v","--vaf",help="variant allele frequency,default:0.02",default=0.02,required=True)
+    parser.add_argument("-v","--vaf",help="variant allele frequency only used in vardict,default:0.02",default=0.02,required=True)
     parser.add_argument("-n","--pon",help="panel of normals vcf",default="0")
     parser.add_argument("-k","--cnvkit",help="control directory contains normal bams",default="0")
     args=parser.parse_args()

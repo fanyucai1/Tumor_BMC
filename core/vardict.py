@@ -22,7 +22,7 @@ def run(vaf,bamfile,bedfile,prefix,outdir,configfile):
     subprocess.check_call(cmd,shell=True)
 if __name__=="__main__":
     parser=argparse.ArgumentParser("")
-    parser.add_argument("--vaf",help="variant allele frequency,default:0.001",default=0.001,required=True)
+    parser.add_argument("--vaf",help="variant allele frequency,default:0.02",default=0.02,required=True)
     parser.add_argument("--bam",help="bam file",required=True)
     parser.add_argument("--bed",help="bed file",required=True)
     parser.add_argument("--outdir",help="output directory",required=True)
