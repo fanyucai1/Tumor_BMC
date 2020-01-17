@@ -16,7 +16,7 @@ def run(pe1,pe2,prefix,outdir,configfile):
     config = Myconf()
     config.read(configfile)
     genefuse=config.get('software','genefuse')
-    list=config.get('database','gene_fuse_list')
+    list=config.get('database','genefuse_cancer')
     ref=config.get('database','hg19_ref')
     if not os.path.exists(outdir):
         os.mkdir(outdir)
